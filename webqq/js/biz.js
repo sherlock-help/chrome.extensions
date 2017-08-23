@@ -34,6 +34,14 @@ function fnTrans(oThis){
 		if(!oCache[sId])
 			oCache[sId] = {"status":true};
 
+
+		var oBuddy = $("#panelBody-5 .chat_content_group.buddy").not(".need_update");
+		
+		if(oBuddy.length > 0 && oCache[sId]["listenHistory"] && $("#panelBody-5 .chat_content_group.buddy").not(".need_update").last().find(".chat_content").html() == "召唤"){
+			oCache[sId]["status"] = true;
+		}
+
+
 		if(oCache[sId]["status"]){
 
 			//init think
@@ -47,7 +55,7 @@ function fnTrans(oThis){
 			//friend can answer not same		
 			oCache[sId]["isFriend"] = sId.indexOf("recent-item-friend") > -1;
 			oCache[sId]["isGroup"] = sId.indexOf("recent-item-group") > -1;
-			
+
 
 			//panelBody-5
 			//chat_content_group buddy
@@ -56,7 +64,11 @@ function fnTrans(oThis){
 			var oNewListen = [];
 			var oNewSay = [];
 			 
-			$("#panelBody-5 .chat_content_group.buddy").each(function(iIndex){
+			$("#panelBody-5 .chat_content_group.buddy").not(".need_update").each(function(iIndex){
+
+				//say group have need_update class 
+				//if(this.getAttribute("class").indexOf("need_update") > -1) return;
+
 
 				var sListen = $(this).find(".chat_content").html();
 
@@ -66,16 +78,16 @@ function fnTrans(oThis){
 				}
 
 			});
-			$("#panelBody-5 .chat_content_group.self").each(function(iIndex){
+			// $("#panelBody-5 .chat_content_group.self").each(function(iIndex){
 
-				if(iIndex >= oCache[sId]["sayHistory"].length){
+			// 	if(iIndex >= oCache[sId]["sayHistory"].length){
 
-					oNewSay.push($(this).find(".chat_content").html());
-				}
+			// 		oNewSay.push($(this).find(".chat_content").html());
+			// 	}
 				
-			});
+			// });
 
-
+			//chat_content_group buddy need_update 
 
 
 			//save to history
@@ -101,7 +113,7 @@ function fnTrans(oThis){
 				oNewSay.push(sSayWord ? sSayWord : "【机器人】你这样说，我都不知道怎么回你了。。。");
 
 				//go away
-				if("走开" == sSayWord){
+				if("走开" == sListenWord){
 					oCache[sId]["status"] = false;
 				}
 
@@ -122,6 +134,7 @@ function fnTrans(oThis){
 		}
 
 		$("#panelRightButtonText-5").click();
+
 	}, 500);	 
 }
 
