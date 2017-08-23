@@ -2,12 +2,12 @@
 //define the object for return word
 var oWords = {
 
-	"召唤" : "我来也~~",
-	"走开" : "轻轻的, 我走了...",
-	"官网" : "http://bakerstreet.club",
-	"博客" : "http://sherlock.help",
-	"作者" : "作者很帅",
-	"乃贤是一只鸡" : "没错，就是！"
+	"召唤" : "【机器人】我来也~~",
+	"走开" : "【机器人】轻轻的, 我走了...",
+	"官网" : "【机器人】http://bakerstreet.club",
+	"博客" : "【机器人】http://sherlock.help",
+	"作者" : "【机器人】作者很帅",
+	"乃贤是一只鸡" : "【机器人】没错，就是！"
 };
 
 
@@ -47,7 +47,7 @@ function fnTrans(oThis){
 			//friend can answer not same		
 			oCache[sId]["isFriend"] = sId.indexOf("recent-item-friend") > -1;
 			oCache[sId]["isGroup"] = sId.indexOf("recent-item-group") > -1;
-
+			
 
 			//panelBody-5
 			//chat_content_group buddy
@@ -58,9 +58,11 @@ function fnTrans(oThis){
 			 
 			$("#panelBody-5 .chat_content_group.buddy").each(function(iIndex){
 
-				if(iIndex >= oCache[sId]["listenHistory"].length){
+				var sListen = $(this).find(".chat_content").html();
 
-					oNewListen.push($(this).find(".chat_content").html());
+				if(iIndex >= oCache[sId]["listenHistory"].length && sListen.indexOf("【机器人】") == -1){
+
+					oNewListen.push(sListen);
 				}
 
 			});
@@ -96,7 +98,7 @@ function fnTrans(oThis){
 					} 
 				}
 
-				oNewSay.push(sSayWord ? sSayWord : "你这样说，我都不知道怎么回你了。。。");
+				oNewSay.push(sSayWord ? sSayWord : "【机器人】你这样说，我都不知道怎么回你了。。。");
 
 				//go away
 				if("走开" == sSayWord){
@@ -108,7 +110,7 @@ function fnTrans(oThis){
 			}
 
 			for(var item in oNewSay){
-
+ 
 				//chat_textarea
 				$("#container #chat_textarea").val(oNewSay[item]);		
 
@@ -117,11 +119,10 @@ function fnTrans(oThis){
 				//save to history
 				oCache[sId]["sayHistory"].push(oNewSay[item]);	
 			}
-
 		}
 
 		$("#panelRightButtonText-5").click();
-	}, 1000);	 
+	}, 500);	 
 }
 
 
@@ -137,8 +138,8 @@ function fnRender(){
  
 if(location.href.indexOf("http://w.qq.com") > -1){
 
-	//will 2s find info
-	setInterval(fnRender, 2000);	
+	//will 1s find info
+	setInterval(fnRender, 1000);	
 
 
 
