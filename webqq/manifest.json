@@ -1,5 +1,5 @@
 {  
-  "name": "qq.robot",
+  "name": "qq.robot",  
   "version": "1.0",  
   "manifest_version": 2,  
   "description": "robot about qq",  
@@ -9,17 +9,14 @@
   },  
   "background" : {  
     "persistent": true,  
-    "scripts": ["bg.js"]
+    "scripts": ["js/init.js"]  
   },  
-  "content_scripts": [{  //对页面内容进行操作的脚本 
-     "matches": ["http://*/*","https://*/*"],  //满足什么条件执行该插件  
-     "js": ["js/base/jquery-3.2.1.min.js", "js/biz.js"],    
-     "run_at": "document_end",  //在document加载时执行该脚本 
-  }]
- // "permissions": [ //允许插件访问的url 
- //      "http://*/",  
- //      "bookmarks",  
- //      "tabs",  
- //      "history"  
- //  ],  
-}  
+  "content_scripts":[{  
+    "matches":["http://*/*","https://*/*"],
+    "js":["js/base/jquery-3.2.1.min.js", "js/biz.js"],
+    "run_at": "document_end"  
+  }],
+  "permissions": [  
+    "tabs","webNavigation"  
+  ]  
+} 
