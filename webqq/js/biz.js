@@ -3,19 +3,19 @@
 //default here
 var oWords = {
 
-	"召唤" : "【机器人】我来也~~",
-	"走开" : "【机器人】轻轻的, 我走了...",
-	"官网" : "【机器人】http://bakerstreet.club",
-	"博客" : "【机器人】http://sherlock.help",
-	"作者" : "【机器人】作者很帅"
+	// "召唤" : "【机器人】我来也~~",
+	// "走开" : "【机器人】轻轻的, 我走了...",
+	// "官网" : "【机器人】http://bakerstreet.club",
+	// "博客" : "【机器人】http://sherlock.help",
+	// "作者" : "【机器人】作者很帅"
 };
 
 
 var oKeyItems = [];
-for(var item in oWords){
-	oKeyItems.push(item);
-}
-oWords["help"] = oKeyItems.join("  |  ");
+// for(var item in oWords){
+// 	oKeyItems.push(item);
+// }
+//oWords["help"] = oKeyItems.join("  |  ");
 
 //ask from golang
 var sReAnswer = "";

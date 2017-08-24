@@ -23,10 +23,126 @@ import(
 //biz here
 //============================================================================
 
+
+
+
+//do xml need here
+//============================================================================
+
+type base struct{
+	XMLName xml.Name `xml:""`
+	Desc string `xml:"desc,attr"`	
+	Info string `xml:",innerxml"`
+}
+
+
+type tools struct{
+	XMLName xml.Name `xml:""`
+	Desc string `xml:"desc,attr"`	
+	Info string `xml:",innerxml"`
+}
+
+
+type techs struct{
+	XMLName xml.Name `xml:""`
+	Desc string `xml:"desc,attr"`	
+	Info string `xml:",innerxml"`
+}
+
+
+type plays struct{
+	XMLName xml.Name `xml:""`
+	Desc string `xml:"desc,attr"`	
+	Info string `xml:",innerxml"`
+}
+
+type words struct{
+	Base base `xml:"base"` 
+	Tools tools `xml:"tools"`
+	Techs techs `xml:"techs"`
+	Plays plays `xml:"plays"`
+}
+
+type emotions struct {
+	Happy string `xml:"happy"`
+	Anguary string `xml:"anguary"`
+	Sad string `xml:"sad"`
+	Cute string `xml:"cute"`
+	Amaze string `xml:"amaze"`
+	Helpless string `xml:"helpless"`
+}
+
 type robot struct {
 
 	XMLName    xml.Name `xml:"robot"`
-	Words string   `xml:"words"`
+	Words words `xml:"words"`
+	Emotions emotions `xml:"emotions"` 
+}
+
+type Recurlyservers struct {
+    //XMLName     xml.Name `xml:"webqq"`
+    //Version     string   `xml:"version,attr"`
+    Robot         robot `xml:"robot"`//[]
+    //Description string   `xml:",innerxml"`
+}
+//============================================================================
+
+func fnThinkWord(sQuestion string, oMapWords words) string{
+
+
+
+	var oAllWords = map[string]string{
+		oMapWords.Base.Desc : oMapWords.Base.Info,
+		oMapWords.Tools.Desc : oMapWords.Tools.Info,
+		oMapWords.Techs.Desc : oMapWords.Techs.Info,
+		oMapWords.Plays.Desc : oMapWords.Plays.Info,
+	}
+
+
+	var oHelp []string
+	oSecHelp := make(map[string]string)
+
+	for k, v := range oAllWords {
+
+
+		oHelp = append(oHelp, k)
+
+		var oItemMap map[string]interface{}
+		if err := json.Unmarshal([]byte(v), &oItemMap); err != nil {
+
+	        return ""
+	    }
+
+
+	    var oSecHelpItem []string
+	    for iK, iV := range oItemMap {
+
+	    	oSecHelpItem = append(oSecHelpItem, iK)
+
+	    	if strings.Index(sQuestion, iK) >= 0 {
+
+	    		return iV.(string)
+	    	}
+	    }
+
+	    oSecHelp[k] = strings.Join(oSecHelpItem, " | ")
+
+    }
+
+    if "help" == sQuestion {
+    	return strings.Join(oHelp, " | ")
+    }
+
+    for k, v := range oSecHelp {
+
+    	if strings.Index(sQuestion, k) >= 0 {
+
+    		return v
+    	}
+    }
+
+
+    return "【机器人】┌( ಠ_ಠ)┘ 不懂怎么回答你哦~"
 }
 
 
@@ -63,38 +179,20 @@ func fnBiz(sQuestion string) string{
     //fmt.Println(v.Robot.Words)
 
 
-    var oMapWords map[string]interface{}
+//    var oMapWords words //map[string]interface{}
 
-    if err := json.Unmarshal([]byte(v.Robot.Words), &oMapWords); err != nil {
+    // if err := json.Unmarshal([]byte(v.Robot.Words), &oMapWords); err != nil {
 
-        return ""
-    }
+    //     return ""
+    // }
 
     //fmt.Println(oMapWords)
 
-    //sQuestion
-    for k, v := range oMapWords {
-    	if strings.Index(sQuestion, k) >= 0 {
-
-    		return v.(string)
-    	}
-    }
-
-    return "【机器人】┌( ಠ_ಠ)┘ 不懂怎么回答你哦~"
+    //sQuestion 
+    return fnThinkWord(sQuestion, v.Robot.Words) 
     //fmt.Println(v)
 }
-
-
-//do xml need here
-//============================================================================
-type Recurlyservers struct {
-    //XMLName     xml.Name `xml:"webqq"`
-    //Version     string   `xml:"version,attr"`
-    Robot         robot `xml:"robot"`//[]
-    //Description string   `xml:",innerxml"`
-}
-//============================================================================
-
+ 
 
 
 func init(){
