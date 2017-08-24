@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<webqq version="1">
+    <robot>
+        <words>
+        	{
+        		"福利" : "【机器人】ʅ（´◔౪◔）ʃ 暂时还没弄出福利。。",
+        		"江衍昆" : "【机器人】(⊙ˍ⊙) 传说中的南北疆昆",
+        		"许伟军" : "【机器人】 (｡・`ω´･) 膜拜许大佬",
+        		"test" : "【机器人】╰(*°▽°*)╯ test success"
+        	}
+        </words>
+    </robot>
+</webqq>
