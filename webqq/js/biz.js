@@ -1,15 +1,13 @@
 
 //define the object for return word
+//default here
 var oWords = {
 
 	"召唤" : "【机器人】我来也~~",
 	"走开" : "【机器人】轻轻的, 我走了...",
 	"官网" : "【机器人】http://bakerstreet.club",
 	"博客" : "【机器人】http://sherlock.help",
-	"作者" : "【机器人】作者很帅",
-	"乃贤是一只鸡" : "【机器人】没错，就是！",
-
-	"江衍昆" : "【机器人】你说的是南北疆昆吗？"
+	"作者" : "【机器人】作者很帅"
 };
 
 
@@ -18,6 +16,9 @@ for(var item in oWords){
 	oKeyItems.push(item);
 }
 oWords["help"] = oKeyItems.join("  |  ");
+
+//ask from golang
+var sReAnswer = "";
 
 
 var oCache = {};
@@ -34,7 +35,7 @@ function fnTrans(oThis){
 		var sId = oThis.id;
 
 		if(!oCache[sId])
-			oCache[sId] = {"status":true};
+			oCache[sId] = {"status":false};
 
 
 		var oBuddy = $("#panelBody-5 .chat_content_group.buddy").not(".need_update");
@@ -113,6 +114,14 @@ function fnTrans(oThis){
 					} 
 				}
 
+
+				//query back
+				if(!sSayWord){
+					sendAjaxRequest("http://127.0.0.1:8521/ask?q="+sListenWord);
+					sSayWord = sReAnswer;
+				}
+
+
 				oNewSay.push(sSayWord ? sSayWord : "【机器人】你这样说，我都不知道怎么回你了。。。");
 
 				//go away
@@ -141,7 +150,7 @@ function fnTrans(oThis){
 
 		$("#panelRightButtonText-5").click();
 
-	}, 500);	 
+	}, 200);	 
 }
 
 
@@ -158,7 +167,7 @@ function fnRender(){
 if(location.href.indexOf("http://w.qq.com") > -1){
 
 	//will 1s find info
-	setInterval(fnRender, 1000);	
+	setInterval(fnRender, 800);	
 
 
 
@@ -166,8 +175,47 @@ if(location.href.indexOf("http://w.qq.com") > -1){
 	//==============================================================
 	//background for look up
 	setInterval(function(){
-		if(0 == $("#current_chat_list").length){
-			location = location;
-		}
-	}, 3600000);//one hour
+		//2 hours after reflash
+		location = location;
+	}, 7200000);//one hour
 }
+
+
+
+//invoke back
+//==========================================================
+var XMLHttpReq;  
+function createXMLHttpRequest() {  
+    try {  
+        XMLHttpReq = new ActiveXObject("Msxml2.XMLHTTP");//IE高版本创建XMLHTTP  
+    }  
+    catch(E) {  
+        try {  
+            XMLHttpReq = new ActiveXObject("Microsoft.XMLHTTP");//IE低版本创建XMLHTTP  
+        }  
+        catch(E) {  
+            XMLHttpReq = new XMLHttpRequest();//兼容非IE浏览器，直接创建XMLHTTP对象  
+        }  
+    }  
+  
+}  
+
+function sendAjaxRequest(url) {  
+    createXMLHttpRequest();                                //创建XMLHttpRequest对象  
+    XMLHttpReq.open("post", url, false);  //false 同步
+    XMLHttpReq.onreadystatechange = processResponse; //指定响应函数  
+    XMLHttpReq.send(null);
+}  
+//回调函数  
+function processResponse() {  
+    if (XMLHttpReq.readyState == 4) {  
+        if (XMLHttpReq.status == 200) {  
+            var sResponseText = XMLHttpReq.responseText;  
+            /** 
+             *实现回调 
+             */  
+            sReAnswer = window.decodeURI(sResponseText);
+        }  
+    }  
+  
+}  
