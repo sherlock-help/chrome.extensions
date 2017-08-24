@@ -72,12 +72,17 @@ function fnTrans(oThis){
 				//say group have need_update class 
 				//if(this.getAttribute("class").indexOf("need_update") > -1) return;
 
-
+				var sNikeName = $(this).find(".chat_nick").html();
 				var sListen = $(this).find(".chat_content").html();
+
+				var oListener = {
+					"Name" : sNikeName,
+					"Word" : sListen
+				}
 
 				if(iIndex >= oCache[sId]["listenHistory"].length && sListen.indexOf("【机器人】") == -1){
 
-					oNewListen.push(sListen);
+					oNewListen.push(oListener);
 				}
 
 			});
@@ -98,7 +103,11 @@ function fnTrans(oThis){
 			var bIfGoAway = oCache[sId]["status"];
 			for(var item in oNewListen){
 
-				var sListenWord = oNewListen[item];
+				var oListenWord = oNewListen[item];
+
+				var sNike = oListenWord["Name"];
+				var sListenWord = oListenWord["Word"];
+
 
 				var sSayWord = "";
 
@@ -117,7 +126,7 @@ function fnTrans(oThis){
 
 				//query back
 				if(!sSayWord){
-					sendAjaxRequest("http://127.0.0.1:8521/ask?q="+sListenWord);
+					sendAjaxRequest("http://127.0.0.1:8521/ask?sid="+ sId +"&n="+ sNike +"&q="+sListenWord);
 					sSayWord = sReAnswer;
 				}
 
@@ -129,7 +138,7 @@ function fnTrans(oThis){
 					oCache[sId]["status"] = false;
 
 				//save to history
-				oCache[sId]["listenHistory"].push(oNewListen[item]);
+				oCache[sId]["listenHistory"].push(sListenWord);
 			}
 
 			for(var item in oNewSay){
@@ -162,7 +171,7 @@ function fnRender(){
 
 	var config = { attributes: true, childList: true}//配置对象
 
-	alert($("#current_chat_list li").length)
+	//alert($("#current_chat_list li").length)
 	$("#current_chat_list li").each(function(){
 	   var _this = $(this);
 	   var observer = new MutationObserver(function(mutations) {//构造函数回调

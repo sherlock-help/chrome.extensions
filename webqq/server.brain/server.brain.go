@@ -24,8 +24,15 @@ import(
 //============================================================================
 
 
+//from pgsql
+//============================================================================
 
 
+//============================================================================
+
+
+
+//from xml answer
 //do xml need here
 //============================================================================
 
@@ -85,7 +92,6 @@ type Recurlyservers struct {
     Robot         robot `xml:"robot"`//[]
     //Description string   `xml:",innerxml"`
 }
-//============================================================================
 
 func fnThinkWord(sQuestion string, oMapWords words) string{
 
@@ -145,7 +151,6 @@ func fnThinkWord(sQuestion string, oMapWords words) string{
     return "【机器人】┌( ಠ_ಠ)┘ 不懂怎么回答你哦~"
 }
 
-
 func fnBiz(sQuestion string) string{
  		
  	//sQuestion
@@ -192,7 +197,8 @@ func fnBiz(sQuestion string) string{
     return fnThinkWord(sQuestion, v.Robot.Words) 
     //fmt.Println(v)
 }
- 
+
+//=====================================================================================================================
 
 
 func init(){
@@ -208,6 +214,8 @@ func main() {
 		//parse querydate
 		r.ParseForm()
 
+		sId := r.Form["sid"][0]
+		sName := r.Form["n"][0]
 		sQuestion := r.Form["q"][0]
 
 
