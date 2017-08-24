@@ -156,6 +156,33 @@ function fnTrans(oThis){
 
 
 function fnRender(){
+
+
+	var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;//浏览器兼容
+
+	var config = { attributes: true, childList: true}//配置对象
+
+	alert($("#current_chat_list li").length)
+	$("#current_chat_list li").each(function(){
+	   var _this = $(this);
+	   var observer = new MutationObserver(function(mutations) {//构造函数回调
+	      mutations.forEach(function(record) {
+	         if(record.type == "attributes"){//监听属性
+	　　　　　　　　//do any code
+
+					fnTrans(record.target);
+	         }
+	         // if(record.type == 'childList'){//监听结构发生变化
+	         //      //do any code
+	         // }
+	      });
+	   });
+	   observer.observe(_this[0], config);
+	});
+
+
+	return;
+	//old
 	$("#current_chat_list .notify").each(function(){
 		//recent-item-friend
 		//recent-item-group
@@ -167,8 +194,8 @@ function fnRender(){
 if(location.href.indexOf("http://w.qq.com") > -1){
 
 	//will 1s find info
-	setInterval(fnRender, 800);	
-
+	//setInterval(fnRender, 800);	
+	setTimeout(fnRender, 10000);
 
 
 	// not business
