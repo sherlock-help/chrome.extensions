@@ -7,7 +7,9 @@ var oWords = {
 	"官网" : "【机器人】http://bakerstreet.club",
 	"博客" : "【机器人】http://sherlock.help",
 	"作者" : "【机器人】作者很帅",
-	"乃贤是一只鸡" : "【机器人】没错，就是！"
+	"乃贤是一只鸡" : "【机器人】没错，就是！",
+
+	"江衍昆" : "【机器人】你说的是南北疆昆吗？"
 };
 
 
@@ -41,8 +43,8 @@ function fnTrans(oThis){
 			oCache[sId]["status"] = true;
 		}
 
-
-		if(oCache[sId]["status"]){
+		//oCache[sId]["status"]
+		if(true){
 
 			//init think
 			if(!oCache[sId]["listenHistory"]){
@@ -92,6 +94,7 @@ function fnTrans(oThis){
 
 			//save to history
 			// and answer
+			var bIfGoAway = oCache[sId]["status"];
 			for(var item in oNewListen){
 
 				var sListenWord = oNewListen[item];
@@ -113,24 +116,27 @@ function fnTrans(oThis){
 				oNewSay.push(sSayWord ? sSayWord : "【机器人】你这样说，我都不知道怎么回你了。。。");
 
 				//go away
-				if("走开" == sListenWord){
+				if("走开" == sListenWord)
 					oCache[sId]["status"] = false;
-				}
 
 				//save to history
 				oCache[sId]["listenHistory"].push(oNewListen[item]);
 			}
 
 			for(var item in oNewSay){
- 
-				//chat_textarea
-				$("#container #chat_textarea").val(oNewSay[item]);		
+ 	
+ 				if(bIfGoAway){
+					//chat_textarea
+					$("#container #chat_textarea").val(oNewSay[item]);		
 
-				//send_chat_btn
-				$("#container #send_chat_btn").click();
+					//send_chat_btn
+					$("#container #send_chat_btn").click();
+ 				}
+
 				//save to history
 				oCache[sId]["sayHistory"].push(oNewSay[item]);	
 			}
+
 		}
 
 		$("#panelRightButtonText-5").click();
